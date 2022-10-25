@@ -22,61 +22,47 @@ import com.tiger.EmployeeManagement.services.employeeservice;
 @Controller
 public class EmployeeController 
 {
-	@Autowired
-	employeeservice eserv;		
-	@GetMapping("/emp")
-	@ResponseBody
-	 public ModelAndView getEmp()
-	   {
-		  ModelAndView mv=new ModelAndView("index");
-		   mv.addObject("employees",eserv.getEmp());
-		   return mv;
-	   }
-	
+	 @Autowired
+	 employeeservice eserv;
+	 //this request mapping fetches all the employees from the database
 	 @GetMapping("/employees")
-	 public String getEmployees(Model model)
-		   {
-		 	   model.addAttribute("employees",eserv.getEmp());
-			   return "index";
-		   }
-	 
+	  public String getEmployees(Model model)
+		 {
+		 	 model.addAttribute("employees",eserv.getEmp());
+			 return "index";
+		 }	 
+	  //this request returns the page used to add new employees
 	 @GetMapping("/addnew")
 	    public String add(Model model) 
 	    {
 	        model.addAttribute("employee", new employee());
 	        return "new";
-	    }
-	 
-	 @RequestMapping(value = "/save", method = RequestMethod.POST)
-	    public String saveStudent(@ModelAttribute("emp") employee std)
+	    }		 
+	   //this request would save the employee details into the database and redirect to the home page
+	  @RequestMapping(value = "/save", method = RequestMethod.POST)
+	    public String saveEmployee(@ModelAttribute("emp") employee std)
 	    {
 	        eserv.addEmp(std);
 	        return "redirect:/employees";
 	    }
-	 
-	 @RequestMapping("/edit/{id}")
+	  //this request would edit the employee details based on their employee id 
+	  @RequestMapping("/edit/{id}")
 	    public ModelAndView showEditStudentPage(@PathVariable(name = "id") int id)
 	    {
 	        ModelAndView mav = new ModelAndView("new");
 	        mav.addObject("employee", eserv.getEpmpID(id));
 	        return mav;	        
-	    }
-	
-	 @RequestMapping("/delete/{id}")
-	    public ModelAndView delete(@PathVariable(name = "id") int id)
+	    }	
+	  //this request would delete the employee details based on their employee id 
+	  @RequestMapping("/delete/{id}")
+	    public String delete(@PathVariable(name = "id") int id,Model model)
 	    {
 		  eserv.removeEmp(id);
-		  ModelAndView mv=new ModelAndView("index");
-		  mv.addObject("employee",eserv.getEmp());		   
-	      return mv;	        
+		  model.addAttribute("employees",eserv.getEmp());
+		  return "index";	   
+	            
 	    }
 	 
-	@RequestMapping("/add/{empname}/{age}")
-		public String addEmp(@PathVariable("empname") String empname,@PathVariable("age") int age)
-		{
-			employee em=new employee(empname,age);
-			eserv.addEmp(em);		
-			return "Employee added succesfully";
-		}
+	
 
 }

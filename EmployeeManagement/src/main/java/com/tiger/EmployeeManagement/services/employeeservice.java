@@ -12,29 +12,25 @@ import com.tiger.EmployeeManagement.domain.employee;
 @Service
 public class employeeservice 
 {
+   //injecting the employee repo interface
    @Autowired
    emprepo rp;   
    //method that returns all the employees
    public List<employee> getEmp()
    {
-	   /*List<employee> emp=new ArrayList();
-	   emp.add(new employee("Ken",22));
-	   emp.add(new employee("Alex",21));
-	   emp.add(new employee("John",30));*/
-	   return rp.findAll();
-   }
-   
+	  return rp.findAll();
+   }   
    //method that saves a new employee
    public void addEmp(employee emp)
    {
 	  rp.save(emp);
    }
-   
+   //returns the employee data based on the id that has been searched
    public employee getEpmpID(int id)
    {
 	   return rp.findById(id).get();
    }
-    
+   //deletes the employee based on the given id
    public void removeEmp(int id)
    {
 	   rp.deleteById(id);
